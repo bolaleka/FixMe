@@ -6,6 +6,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -15,6 +16,7 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Scanner;
 
 
 public class Server {
@@ -23,6 +25,8 @@ public class Server {
     private static ServerSocketChannel serverSocket = null;
     private static Hashtable<SocketAddress, SocketChannel> clientlist = new Hashtable<SocketAddress, SocketChannel>();
     private static Hashtable<Integer, Hashtable<SocketAddress, SocketChannel>> routingTable = new Hashtable<>();
+    
+    
     public static void main(String[] args) throws IOException {
         //Get selector
         Selector selector = Selector.open();
@@ -40,8 +44,8 @@ public class Server {
                 serverSocket.configureBlocking(false);
                 serverSocket.register(selector, SelectionKey.OP_ACCEPT);              
         }
-        logger(InetAddress.getLocalHost().getHostAddress() + " [Main]  INFO Router - Waiting for conection from Broker/Market side");        
-     
+        logger(InetAddress.getLocalHost().getHostAddress() + " [Main]  INFO Router - Waiting for conection from Broker/Market side"); 
+    
         for(;;) {
             
           selector.select();          
@@ -68,15 +72,14 @@ public class Server {
                     routingTable.put(randomID, clientlist);
 
                     sendID(msg, key);
-                } else if (selectedKey.isReadable()) {
-                   readAndDispatchMessage(selectedKey);
                     
+                } else if (selectedKey.isReadable()) {
+                    readAndDispatchMessage(selectedKey);
                 } 
-                
             }
-        
+            
         }
-
+      
     }
 
     private static void sendID(String msg, SelectionKey key) throws IOException {
@@ -91,7 +94,9 @@ public class Server {
 
 
     private static void readAndDispatchMessage(SelectionKey key) throws IOException {
+        
         SocketChannel channel = (SocketChannel) key.channel();
+
         // read the data
         CharsetDecoder decoder = Charset.forName("UTF-8").newDecoder();
         
@@ -107,12 +112,17 @@ public class Server {
             for(SocketAddress soc : routingTable.values().iterator().next().keySet()) {
                 if(!soc.equals(channel.getLocalAddress())) {
                     CharsetEncoder encoder = Charset.forName("UTF-8").newEncoder();
-                    //• Forward the message
-                    routingTable.values().iterator().next().get(soc).write(encoder.encode(CharBuffer.wrap(msg + validateCheckSum(msg))));
+                    try {
+                        //• Forward the message
+                        routingTable.values().iterator().next().get(soc).write(encoder.encode(CharBuffer.wrap(msg + validateCheckSum(msg))));
+                    } catch (ClosedChannelException e) {
+                        System.out.println("\nMarket is closed");
+                        
+                    }
                 }
             }
         }
-        
+
     }
 
     private static void logger(String str) {

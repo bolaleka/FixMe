@@ -157,7 +157,10 @@ public class MarketConnHandler extends Thread {
 			ByteBuffer buffer;
 
 			if (true) {
-				if (!input.equalsIgnoreCase("exit")) {
+				if(input.isEmpty()) {
+					logger("No input found");
+					sendMessage();
+				}else if (!input.equalsIgnoreCase("exit")) {
 					logger("[" + "\u001B[33m" + "WARNING" + "\u001B[0m" + "]" + "  Only [EXIT] option is allowed..");
 					sendMessage();
 				} else {

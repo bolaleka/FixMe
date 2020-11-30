@@ -124,7 +124,10 @@ public class BrokerConnHandler extends Thread {
 			ByteBuffer buffer;
 
 			if (true) {
-				if (!input.equalsIgnoreCase("Sell") && !input.equalsIgnoreCase("Buy") && !input.equalsIgnoreCase("exit")) {
+				if(input.isEmpty()) {
+					logger("No input found");
+					sendMessage();
+				}else if (!input.equalsIgnoreCase("Sell") && !input.equalsIgnoreCase("Buy") && !input.equalsIgnoreCase("exit")) {
 					logger("[" + "\u001B[33m"+"WARNING"+ "\u001B[0m" + "]" + "   Enter BUY/SELL to trade");
 					sendMessage();
 				} else {
