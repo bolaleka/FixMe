@@ -2,9 +2,9 @@ dog,10,4
 cat,5,2
 pen,5,3
 currency,5,7
-phone,4,2
 jean,5,3
 tie,6,2
 security,5,2
 shares,5,3
-gold,10,2
+phone,4,1
+gold,10,1

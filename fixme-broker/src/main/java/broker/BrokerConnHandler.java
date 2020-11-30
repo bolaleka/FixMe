@@ -173,6 +173,7 @@ public class BrokerConnHandler extends Thread {
 	}
 
 	public void addInput(String input) {
+		logger("Available instrument: [dog, cat, pen, currency, phone, jean, tie, security, shares, gold]\n ");
 		System.out.print("Instrument: " );
 		input = INPUT.nextLine();
 		tag.setInstrument(input);
