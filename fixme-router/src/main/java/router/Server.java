@@ -16,8 +16,6 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Scanner;
-
 
 public class Server {
 
