@@ -5,3 +5,5 @@ architecture are numerous and have multiple solutions.
 
 
 
+# Setup
+1. Run mvn clean package
