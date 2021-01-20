@@ -20,3 +20,11 @@ Establish FIX connection between the Market and Broker from a Router
 ## Broker Component
 
 * Run -> java -jar fixme-broker/target/fixme-broker.jar
+
+# Tools
+
+* JAVA openJDK-14
+* Multi-module Maven build (Pom file)
+* Non Blocking Sockets
+* Javax Validation
+* FIX Messages
