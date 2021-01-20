@@ -1,8 +1,10 @@
 # FixMe
-## General info
+
+# General info
 The aim of this project is to have the knowledge of TCP protocol ,Sockets and Stock Exchange Simulation tools (FIX Protocol Messages).
 Establish FIX connection between the Market and Broker from a Router
-## Setup
+
+# Setup
 
 * Set your JDK_HOME to OpenJDK-14
 * Run mvn clean package (To build project)
